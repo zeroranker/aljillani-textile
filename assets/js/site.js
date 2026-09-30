@@ -2,7 +2,13 @@
    AL-JILANEE TEXTILE INDUSTRY (PVT) LTD — SITE BEHAVIOUR
    --------------------------------------------------------------------------
    The entire site works with JavaScript disabled. Everything here is
-   progressive enhancement. Total size target: under 8 KB.
+   progressive enhancement.
+
+   SIZE: 14.3 KB raw, 4.9 KB gzipped, which is what a buyer actually
+   downloads. An earlier version of this header said "under 8 KB" without
+   saying which measure it meant. Raw was already 11.4 KB at the time, so the
+   claim was wrong either way it was read. Check it with:
+     node -e "const z=require('zlib'),f=require('fs');const b=f.readFileSync('assets/js/site.js');console.log(b.length,z.gzipSync(b).length)"
 
    WHAT THIS FILE DOES
    1. Opens/closes the mobile navigation.
@@ -154,12 +160,27 @@
   function initValidation(form) {
     var inputs = form.querySelectorAll("input, select, textarea");
     for (var i = 0; i < inputs.length; i++) {
+      /* Link each control to its hint and its error text, so a screen reader
+         reads the explanation out with the field. Without this the buyer is
+         told only "invalid" and has to go hunting for what is wrong.
+         Done in script rather than in the markup so a field added later works
+         without the owner remembering to add attributes. */
+      var wrap = inputs[i].closest(".field");
+      if (wrap) {
+        var ids = [];
+        var err = wrap.querySelector(".field__error");
+        var hint = wrap.querySelector(".field__hint");
+        if (err && err.id) ids.push(err.id);
+        if (hint) { if (!hint.id) hint.id = inputs[i].id + "-hint"; ids.push(hint.id); }
+        if (ids.length) inputs[i].setAttribute("aria-describedby", ids.join(" "));
+      }
+
       /* Validate on blur, never while typing — correcting mid-word is hostile. */
       inputs[i].addEventListener("blur", function (e) { validateField(e.target); });
       /* Re-validate live once the field has already been marked wrong. */
       inputs[i].addEventListener("input", function (e) {
-        var wrap = fieldError(e.target);
-        if (wrap && wrap.hasAttribute("data-invalid")) validateField(e.target);
+        var w = fieldError(e.target);
+        if (w && w.hasAttribute("data-invalid")) validateField(e.target);
       });
     }
   }
@@ -196,6 +217,26 @@
 
     var status = form.querySelector(".form__status");
 
+    /* A plain link the buyer clicks themselves. A popup blocker cannot stop a
+       real click, so this is the one route that works when window.open does
+       not. Created here rather than in the markup so it stays hidden until it
+       is actually needed. */
+    function fallbackLink(url) {
+      var link = form.querySelector("[data-wa-fallback]");
+      if (!link) {
+        link = doc.createElement("a");
+        link.setAttribute("data-wa-fallback", "");
+        link.className = "btn btn--primary mt-4";
+        link.target = "_blank";
+        link.rel = "noopener";
+        link.textContent = "Open WhatsApp with your message";
+        if (status && status.parentNode) status.parentNode.insertBefore(link, status.nextSibling);
+        else form.appendChild(link);
+      }
+      link.href = url;
+      return link;
+    }
+
     form.addEventListener("submit", function (e) {
       e.preventDefault();
 
@@ -211,11 +252,11 @@
       }
 
       if (!allOk) {
+        var stale = form.querySelector("[data-wa-fallback]");
+        if (stale) stale.remove();
         if (status) {
+          status.className = "form__status form__status--err";
           status.textContent = "Please check the highlighted fields before sending.";
-          status.style.borderColor = "";
-          status.style.color = "";
-          status.style.background = "";
         }
         if (firstBad) firstBad.focus();
         return;
@@ -223,14 +264,41 @@
 
       var message = buildMessage(form);
       var url = "https://wa.me/" + WA_NUMBER + "?text=" + encodeURIComponent(message);
-      window.open(url, "_blank", "noopener");
 
-      if (status) {
-        status.textContent =
-          "Your enquiry has been opened in WhatsApp, ready to send. If nothing opened, " +
-          "use the WhatsApp button on this page and paste your message, or email us directly.";
+      /* window.open returns null when a popup blocker stops it. That is common
+         on Safari and on locked-down office networks, and this form is the one
+         thing on the site a buyer cannot do without.
+
+         Before this return value was checked, a blocked popup still reported
+         "Your enquiry has been opened in WhatsApp" and then called
+         form.reset(), which destroyed a detailed enquiry the buyer had just
+         typed, several minutes of work, with no way to recover it. So: never
+         claim success unless a window actually opened, and never clear the
+         form on a path that did not deliver. */
+      var opened = null;
+      try { opened = window.open(url, "_blank", "noopener"); } catch (err) { opened = null; }
+
+      if (opened) {
+        var stale2 = form.querySelector("[data-wa-fallback]");
+        if (stale2) stale2.remove();
+        if (status) {
+          status.className = "form__status form__status--ok";
+          status.textContent =
+            "Your enquiry has been opened in WhatsApp, ready to send. " +
+            "Press send there and we will reply with a date we commit to.";
+        }
+        form.reset();
+      } else {
+        if (status) {
+          status.className = "form__status form__status--err";
+          status.textContent =
+            "Your browser blocked the WhatsApp window, so nothing has been sent. " +
+            "Nothing you typed has been lost. Open the button below to send it, " +
+            "or allow pop-ups for this site and press send again.";
+        }
+        var link = fallbackLink(url);
+        if (link) link.focus();
       }
-      form.reset();
     });
   }
 

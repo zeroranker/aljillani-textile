@@ -609,3 +609,58 @@ media, measured against the real rendered background of every text element;
 0 overflow at 390px and 1280px; zero runtime errors; print media confirmed by
 emulation at 21:1 for the former dark sections. Honesty invariants unchanged:
 **104** TO CONFIRM chips, **53** .edit-note spans, **17** WhatsApp links.
+---
+
+## Improvement cycle 03
+
+Scope: the buyer's enquiry form, which is the one thing on the site a
+prospect cannot complete without.
+
+| # | Finding | Severity | State |
+|---|---|---|---|
+| 74 | **A popup blocker destroyed the buyer's enquiry.** window.open returns 
+ull when blocked, the return value was never checked, the page still reported success, and orm.reset() then wiped every field | high | FIXED |
+| 75 | The success message claimed "Your enquiry has been opened in WhatsApp" on a path where nothing had opened | high | FIXED |
+| 76 | No ria-describedby on any control, so a screen reader announced "invalid" without ever reading the explanation that was on screen | medium | FIXED |
+| 77 | .form__status--ok and --err were defined in CSS but never used; the script set inline styles instead | low | FIXED |
+| 78 | The JS header claimed "Total size target: under 8 KB" without saying raw or gzipped. Raw was 11.4 KB at the time, so the claim was wrong under either reading | low | FIXED |
+| 79 | Documented page weight was stale after cycles 01 and 02 | low | FIXED |
+
+**#74 is the most damaging defect found in these three cycles.** A buyer
+fills nine fields describing the fabric, the quantity, the shade and the date,
+presses send, and a popup blocker quietly refuses the window. The site says
+it worked and empties the form. Several minutes of work, gone, with no copy to
+paste and nothing to retry from. Popup blocking is normal on Safari and on
+locked-down office networks, which is exactly where an exporter evaluating a
+supplier would be.
+
+The fix is three separate decisions, because any one of them alone would still
+lose the enquiry:
+
+1. Check what window.open returns and never claim success unless a window
+   actually opened.
+2. Never call orm.reset() on a path that did not deliver.
+3. On a block, insert a real link the buyer clicks themselves. A popup blocker
+   cannot stop a genuine user click, so this route always works. Focus is
+   moved to it, and the message says plainly that nothing was sent and nothing
+   was lost.
+
+**Verified by driving the real form in a browser,** not by reading the code:
+with window.open stubbed to return 
+ull, the enquiry survives intact
+(name, fabric and quantity all preserved), the status reads "Your browser
+blocked the WhatsApp window, so nothing has been sent. Nothing you typed has
+been lost.", and the focus lands on the working fallback link. With the popup
+allowed, the form clears as before, which is correct because WhatsApp really
+opened.
+
+**On #76.** ria-describedby is now wired in script rather than in the
+markup, so a field the owner adds later is described automatically and they do
+not have to remember an attribute.
+
+**Weight, re-measured rather than assumed.** Worst first visit was 58.4 KB and
+is now **61.7 KB**, of which CSS is 12.5 KB gzipped, JS 4.9 KB gzipped, the
+homepage HTML 10.2 KB gzipped and the webfont 34.1 KB. That is 2.41% of the
+Web Almanac 2025 mobile median of 2,559 KB. The whole of cycles 01 to 03 cost
+3.3 KB. Honesty invariants unchanged: **104** TO CONFIRM chips, **53**
+.edit-note spans, **17** WhatsApp links.
