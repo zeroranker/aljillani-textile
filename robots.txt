@@ -1,0 +1,51 @@
+# robots.txt — Al-Jilanee Textile Industry (Pvt) Ltd
+#
+# This site deliberately ALLOWS AI crawlers.
+#
+# Research finding (Web Almanac 2025, Generative AI chapter): only about 4.5%
+# of robots.txt files name gptbot at all, and of those, nearly all DISALLOW it.
+# A small business that permits access is taking an available advantage, and
+# it costs nothing.
+#
+# Google's published position is that nothing special is required for AI
+# Overviews or AI Mode beyond being crawlable, indexable and snippet-eligible.
+# The best "AEO" strategy is ordinary SEO done properly. This file is part of
+# that.
+
+User-agent: *
+Allow: /
+Sitemap: https://www.aljillanitex.com/sitemap.xml
+
+# --- AI assistants -------------------------------------------------------
+# OpenAI — used for ChatGPT search and cited answers.
+User-agent: GPTBot
+Allow: /
+
+# Anthropic — used for Claude and Claude search.
+User-agent: ClaudeBot
+Allow: /
+
+# Anthropic — user-initiated fetches only, not used for training.
+User-agent: Claude-User
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+# Perplexity.
+User-agent: PerplexityBot
+Allow: /
+User-agent: Perplexity-User
+Allow: /
+
+# Google AI Overviews and AI Mode use the same crawl infrastructure as Googlebot,
+# so no separate permission is needed. Google-Extended controls training use.
+User-agent: Google-Extended
+Allow: /
+
+# Others commonly encountered in B2B research.
+User-agent: Applebot-Extended
+Allow: /
+
+# No crawl-delay. This is a nine-page static site. Rate limiting a site this
+# small would only slow search engines down for no benefit.

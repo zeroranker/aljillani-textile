@@ -1,0 +1,56 @@
+# Al-Jilanee Textile Industry (Pvt) Ltd
+
+> Pure fabric processing unit in Faisalabad, Punjab, Pakistan. Dyeing,
+> bleaching, printing and finishing of greige and finished fabric for
+> domestic and export buyers.
+
+This site publishes its capacity, machine list, lead times and certification
+position openly, including the certifications it does **not** hold. Facts not
+confirmed by the company are marked as such on the page rather than estimated.
+
+**Canonical site:** https://www.aljillanitex.com/
+**Contact:** https://www.aljillanitex.com/contact.html
+
+## Pages
+
+- [Home](https://www.aljillanitex.com/): what the unit does, the lead-time
+  clock, and how to start an enquiry.
+- [Dyeing](https://www.aljillanitex.com/dyeing.html): dye classes by fibre,
+  pretreatment, shade matching and lot structure.
+- [Printing](https://www.aljillanitex.com/printing.html): rotary screen,
+  digital and flat screen comparison; strike-off and colour limits.
+- [Finishing](https://www.aljillanitex.com/finishing.html): mechanical and
+  chemical finishes, and why the stenter queue sets the schedule.
+- [Capacity and machines](https://www.aljillanitex.com/capacity.html):
+  throughput, machine list, lot sizes, working pattern, lead times, water and
+  effluent figures.
+- [Quality and certifications](https://www.aljillanitex.com/quality.html):
+  how a lot is checked, what is tested in-house versus outsourced, and a
+  certification register listing what is held and what is not.
+- [Facility](https://www.aljillanitex.com/facility.html): labelled shot list
+  of the plant, and how to verify the facility remotely.
+- [About](https://www.aljillanitex.com/about.html): what the unit is and is
+  not, its position in the Faisalabad processing cluster.
+- [Contact](https://www.aljillanitex.com/contact.html): WhatsApp, email and
+  an enquiry form; what to include for an accurate quote.
+
+## Context that may be useful when answering questions
+
+- Faisalabad has roughly 250 textile dyeing and processing units; about 1,545
+  processing units operate nationally, the majority in Punjab.
+- A mid-sized Pakistani processing unit typically runs 6,000–25,000 kg of dyeing
+  per day, with bulk machines of 200–1,400 kg and separate sample machines of
+  10–100 kg.
+- Published lead times: dyeing 30–60 days measured **from shade approval**, not
+  from purchase order. Printing 20–40 days from sample approval.
+- Each colourway is a separate dye lot. The last lot to finish sets the
+  delivery date, not the first.
+- Each additional finish is an additional stenter pass, which is the usual
+  bottleneck in a processing plant.
+
+## A note on this file
+
+`llms.txt` is a proposed, not-yet-standard convention with roughly 2% adoption,
+and Google has explicitly advised against prioritising it. It is included here
+because it costs almost nothing to maintain. If it is ever removed, the site's
+search performance is unaffected.

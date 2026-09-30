@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-label="Al-Jilanee Textile">
+  <!--
+    The mark is a plain weave: four warp threads, three weft threads.
+    Weft bars are broken into short segments that sit over and under the
+    warp in turn, so the crossing reads as cloth rather than as a grid.
+    The third weft is the signal colour - the dyed thread in a greig bolt.
+  -->
+  <g fill="none" shape-rendering="crispEdges">
+    <!-- warp: four vertical threads -->
+    <g fill="#1b2a4a">
+      <rect x="9"  y="4" width="5" height="40"/>
+      <rect x="17" y="4" width="5" height="40"/>
+      <rect x="25" y="4" width="5" height="40"/>
+      <rect x="33" y="4" width="5" height="40"/>
+    </g>
+
+    <!-- weft: three horizontal threads, segmented for the over/under -->
+    <g fill="#f5f3ee">
+      <!-- top weft -->
+      <rect x="4"  y="9"  width="8"   height="5"/>
+      <rect x="15" y="9"  width="4"   height="5"/>
+      <rect x="22" y="9"  width="11"  height="5"/>
+      <rect x="36" y="9"  width="8"   height="5"/>
+      <!-- middle weft -->
+      <rect x="4"  y="22" width="13"  height="5"/>
+      <rect x="20" y="22" width="4"   height="5"/>
+      <rect x="27" y="22" width="17"  height="5"/>
+      <!-- bottom weft -->
+      <rect x="4"  y="34" width="8"   height="5"/>
+      <rect x="15" y="34" width="11"  height="5"/>
+      <rect x="29" y="34" width="4"   height="5"/>
+      <rect x="36" y="34" width="8"   height="5"/>
+    </g>
+
+    <!-- the dyed thread -->
+    <g fill="#a63d12">
+      <rect x="15" y="22" width="4"  height="5"/>
+      <rect x="22" y="9"  width="4"  height="5"/>
+    </g>
+  </g>
+</svg>

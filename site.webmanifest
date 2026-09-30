@@ -1,0 +1,24 @@
+{
+  "name": "Al-Jilanee Textile Industry (Pvt) Ltd",
+  "short_name": "Al-Jilanee Textile",
+  "description": "Fabric dyeing, printing and finishing in Faisalabad, Pakistan.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f5f3ee",
+  "theme_color": "#1b2a4a",
+  "lang": "en",
+  "icons": [
+    {
+      "src": "/assets/img/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/img/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}
