@@ -42,7 +42,7 @@
   --ink-3:        #5a606e;   /* labels, meta             5.88:1 raised / 4.72:1 sunk (AA) */
   --indigo:       #152c55;   /* dye-vat blue: dark sections, headers    13.79:1 w/ white */
   --indigo-deep:  #0b1a35;   /* hero + footer ground                   17.31:1 w/ white */
-  --signal:       #b8390f;   /* madder red. THE accent.  5.78:1 w/ white, 5.40:1 on paper-raised */
+  --signal:       #ae340e;   /* madder red. THE accent. Was #b8390f, which measured 4.33:1 on --paper-sunk and failed AA for the 11px bold .eyebrow--signal and .card__index text. #ae340e clears every background the accent text sits on: 4.77:1 on paper-sunk, 6.37:1 white-on-accent. Not visibly a different colour. */
   --line:         #cfd3da;
   --line-strong:  #7f8796;   /* 3.37:1 raised / 3.00:1 paper — meets SC 1.4.11 */
 
@@ -84,7 +84,7 @@
   /* The woven mark. Inverted on dark grounds so it never disappears. */
   --mark-warp: #152c55;
   --mark-weft: #f6f7f9;
-  --mark-dye:  #b8390f;
+  --mark-dye:  #ae340e;   /* the light-ground strand. Tracks --signal so the mark and the accent are one red, not two near-misses. The dark-ground variant below is deliberately lighter. */
 }
 .site-footer, .hero { --mark-warp: #f6f7f9; --mark-weft: #0b1a35; --mark-dye: #ff7a4d; }
 
@@ -900,6 +900,30 @@ html.editing body::before {
 
 .addr { font-style: normal; font-size: .95rem; color: var(--ink-2); line-height: 1.55; }
 
+/* --- 31. Contrast on dark grounds -----------------------------------------
+   Measured on all nine pages: 31 elements below 4.5:1. All shared one cause,
+   a light-theme token or an inherited white reaching a dark ground. A token
+   was valid where it was written and wrong where it was reused.
+
+   .brand__sub is the wordmark strapline. It appears in the light header and
+   in the dark footer; the --ink-3 rule was written for the header and put it
+   at 2.75:1 on the footer ground. .addr was the same bug at 1.59:1. Both now
+   take a light value inside the footer and keep the dark one elsewhere. */
+
+.site-footer .brand__sub { color: rgba(255,255,255,.62); }
+.site-footer .addr { color: rgba(255,255,255,.72); }
+.site-footer .addr strong { color: #fff; }
+
+/* The datasheet sits inside the hero, which is a dark ground, but the panel
+   itself is light. Without this it inherited white and its title measured
+   1.34:1. */
+.datasheet { color: var(--ink); }
+
+/* A ghost button is transparent, so on a dark ground it needs light text.
+   Only .hero had this; the same button in .section--dark measured 1.39:1. */
+.section--dark .btn--ghost,
+.hero .btn--ghost { color: #fff; border-color: rgba(255,255,255,.42); }
+
 /* --- 27. Crumbs / page head ---------------------------------------------- */
 
 .crumbs {
@@ -945,8 +969,13 @@ a.link-arrow::after {
 @media (min-width: 48rem) { .footer-grid { grid-template-columns: minmax(0,1.4fr) minmax(0,1fr) minmax(0,1fr); } }
 .site-footer h3 { color: #fff; font-size: .95rem; letter-spacing: -.01em; margin-bottom: var(--s4); }
 .footer-links { list-style: none; margin: 0; padding: 0; display: grid; gap: .55rem; }
-.footer-links a { text-decoration: none; color: rgba(255,255,255,.72); font-size: .93rem; }
-.footer-links a:hover { color: #fff; text-decoration: underline; }
+.footer-links a { text-decoration: none; color: var(--ink-2); font-size: .93rem; }
+/* The footer is the only place these are on a dark ground. The white rule
+   used to be global, and .footer-links is also reused inside the light .rail
+   panels, where white text measured 1.07:1 and was effectively invisible. */
+.site-footer .footer-links a { color: rgba(255,255,255,.72); }
+.footer-links a:hover { color: var(--signal); text-decoration: underline; }
+.site-footer .footer-links a:hover { color: #fff; }
 .footer-bottom {
   margin-top: var(--s7); padding-top: var(--s5);
   border-top: 1px solid var(--line-dark);
@@ -998,9 +1027,72 @@ html.no-js [data-rise] { opacity: 1; transform: none; }
 
 /* --- 32. Print ----------------------------------------------------------- */
 
+/* --- 32. Print -----------------------------------------------------------
+   A buyer, or the office printing a spec sheet to hand someone, must not get
+   an unreadable page. Two defects were fixed here.
+
+   1. The DRAFT ribbon was hidden when printing. That was backwards. A printed
+      sheet is the artefact most likely to leave the building, so it is the one
+      that most needs the warning. It now prints as outlined black on white.
+
+   2. .section--dark carries white text on an indigo background. No rule here
+      set print-color-adjust, and its initial value is "economy", so browsers
+      omit backgrounds unless the reader ticks "Background graphics". The
+      result on paper: white text on white paper. On index.html that section is
+      the certifications list, which is the last thing a buyer needs to lose.
+      Never rely on a background to carry meaning on paper: the section is
+      forced to a light treatment so it reads the same either way. */
+
 @media print {
-  .site-header, .draft-ribbon, .wa-bar, .site-footer, .skip { display: none !important; }
+  .site-header, .wa-bar, .site-footer, .skip { display: none !important; }
   body { background: #fff; color: #000; font-size: 11pt; }
   .section { padding-block: 1rem; }
-  a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 9pt; color: #555; }
+
+  /* Expand the destination of a printed link so the sheet is useful off the
+     screen, but not when the URL is a query string. A wa.me link expands to
+     a percent-encoded paragraph, which is unreadable and runs off the page. */
+  a[href^="http"]:not([href*="wa.me"]):not([href*="?"])::after {
+    content: " (" attr(href) ")"; font-size: 9pt; color: #555;
+  }
+
+  .draft-ribbon {
+    display: block !important;
+    background: #fff !important;
+    color: #000 !important;
+    border: 1.5pt solid #000;
+  }
+
+  /* .hero is the other dark ground on the site, and it was missed by the
+     first pass at this: white text on --indigo-deep, same failure as
+     .section--dark. The "At a glance" datasheet inside it is genuinely
+     useful on paper, so the hero is normalised rather than hidden. */
+  .hero,
+  .hero .lead,
+  .hero__note,
+  .hero .eyebrow,
+  .hero .btn--ghost { background: #fff !important; color: #000 !important; border-color: #000 !important; }
+  .hero h1 { color: #000 !important; }
+  .hero::before, .hero::after { display: none !important; }   /* woven ground and dye bleed */
+  .hero .btn--primary { background: #fff !important; color: #000 !important; border: 1pt solid #000; }
+  .datasheet { box-shadow: none !important; border-color: #999 !important; }
+
+  .section--dark,
+  .section--dark p,
+  .section--dark .section-head p,
+  .section--dark .on-dark,
+  .section--dark .text-muted,
+  .section--dark li { background: #fff !important; color: #000 !important; }
+  .section--dark h2, .section--dark h3 { color: #000 !important; }
+  .section--dark .eyebrow { color: #555 !important; }
+  .section--dark::before { display: none !important; }
+  .section--dark .flow__step,
+  .section--dark .flow__step:last-child { border-top-color: #999 !important; border-bottom-color: #999 !important; }
+
+  /* Keep a table readable across a page break, and let it use the full sheet. */
+  .table-wrap { overflow: visible !important; border: 0 !important; box-shadow: none !important; }
+  table { font-size: 9pt; }
+  thead { display: table-header-group; }   /* repeat column headings per page */
+  tr, thead { break-inside: avoid; }
+  h2, h3 { break-after: avoid; }
+  .card, .callout, .timeline__row, .deflist__row { break-inside: avoid; }
 }

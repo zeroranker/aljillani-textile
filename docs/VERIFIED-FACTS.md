@@ -564,3 +564,48 @@ internal link resolves over HTTP; no console or network errors on any page;
 nav toggle, RFQ form blocking on empty submit, and \?edit\ mode all confirmed
 working. Honesty invariants unchanged: **104** \TO CONFIRM\ chips and **17**
 WhatsApp links, identical to before the cycle.
+---
+
+## Improvement cycle 02
+
+Scope: the angles cycle 01 did not reach, namely print, colour contrast
+end to end, and the dark grounds.
+
+| # | Finding | Severity | State |
+|---|---|---|---|
+| 64 | **31 text elements across all 9 pages sat below WCAG AA contrast.** Four causes, none of them exotic | high | FIXED |
+| 65 | .footer-links a was coloured gba(255,255,255,.72) as a global rule for the footer, but the same class is reused inside the light .rail panels, where it measured **1.07:1** | high | FIXED |
+| 66 | .brand__sub and .addr used the light-theme tokens --ink-3 and --ink-2, and were reused unchanged in the dark footer: **2.75:1** and **1.59:1** | high | FIXED |
+| 67 | .btn--ghost had a light-text variant for .hero but not for .section--dark, so the same button measured **1.39:1** there | high | FIXED |
+| 68 | --signal #b8390f measured **4.33:1** on --paper-sunk, failing AA for the 11px bold .eyebrow--signal and .card__index text on every page | medium | FIXED |
+| 69 | .datasheet inherits color: #fff from .hero, but the panel itself is light, so its title measured **1.34:1** | medium | FIXED |
+| 70 | In print, .section--dark and .hero both printed white text on a background browsers omit by default, so the certifications table printed as **white on white** | high | FIXED |
+| 71 | The @media print block hid .draft-ribbon, stripping the only "do not publish" warning from a printed sheet | medium | FIXED |
+| 72 | In print, [href^="http"]::after expanded the WhatsApp URL, printing a percent-encoded paragraph across the page | low | FIXED |
+| 73 | .mark-dye light-ground default had drifted from --signal, leaving the logo strand a different red from the accent | low | FIXED |
+
+**Correction to an earlier claim.** Cycle 01 reported contrast as computed
+and passing. That was wrong, and the method was the reason: token pairs were
+checked against each other, but never against the background a token actually
+renders on. .footer-links a and .brand__sub were both correct where they
+were written and wrong where they were reused. A token that is valid in one
+container is not automatically valid in the next.
+
+**Why the print fix does not depend on background printing.** Headless Chrome
+prints backgrounds, so a generated PDF cannot prove the failure. The CSS
+specification is enough: print-color-adjust is never set, and its initial
+value is economy, which tells the user agent to omit backgrounds unless the
+reader opts in. Rather than depend on which way that goes, .section--dark
+and .hero are now forced to a light treatment in print. The result is
+correct whether or not backgrounds print, which is the point.
+
+**--signal moved from #b8390f to #ae340e.** Chosen by solving for the
+closest legible value that clears every background the accent text sits on:
+4.77:1 on --paper-sunk and 6.37:1 white-on-accent. The dark-ground
+--mark-dye variant #ff7a4d was left alone; it is deliberately lighter.
+
+**Verified after the fix:** 0 contrast failures across all 9 pages in screen
+media, measured against the real rendered background of every text element;
+0 overflow at 390px and 1280px; zero runtime errors; print media confirmed by
+emulation at 21:1 for the former dark sections. Honesty invariants unchanged:
+**104** TO CONFIRM chips, **53** .edit-note spans, **17** WhatsApp links.
