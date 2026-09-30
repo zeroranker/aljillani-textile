@@ -722,3 +722,31 @@ hits, all false: it read element.textContent, which concatenates nested
 .edit-note text, so a paragraph containing an edit-note looked like a leak.
 Walking text nodes and testing ancestors gave the true count of 3. The false
 version would have "fixed" working pages.
+### Correction to a figure quoted in every cycle above
+
+Cycles 01 to 04 each reported "**104** TO CONFIRM chips". That number was
+counted with class="todo", an exact string match. The DOM count is **181**.
+Reconciled, there are three families:
+
+| Class | Count | What a buyer sees |
+|---|---|---|
+| 	odo | **104** | The real, honest "To confirm" chip |
+| 	odo todo--empty | **76** | A plain dash, in table cells where the column does not apply |
+| edit-note | **56** | Nothing, unless ?edit is in the address |
+
+So 104 was right for the thing it was quoted as, and wrong as a total. The
+	odo--empty family is deliberate and correct: "not applicable" is a different
+claim from "not yet confirmed", and styling them identically would have made a
+table of settled facts look like a wall of warnings.
+
+**And the count itself hid a real defect.** The exact-match count was 104
+while the DOM held 181, and reconciling the gap surfaced one element carrying
+class="todo edit-note" on acility.html: owner guidance about third-party
+inspection firms, wearing the buyer-facing chip class. It was invisible to
+buyers **only because .edit-note is defined after .todo in the stylesheet**
+and wins on source order. Reorder those two rules, or trim the .edit-note
+rule, and a chip reading "EDIT: which third-party inspection firms..." appears
+on a buyer-facing page. That is precisely the confusion the project forbids:
+.todo is buyer-visible on purpose and .edit-note is owner-only, and they
+were merged in one place. The .todo class has been removed; nothing rendered
+differently, and the landmine is defused.
