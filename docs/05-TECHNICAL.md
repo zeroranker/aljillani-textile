@@ -219,7 +219,7 @@ has them.
 
 | Page | HTML on disk | HTML compressed | First visit | Repeat visit |
 |---|---|---|---|---|
-| `index.html` | 38,927 B | 10.2 KB | **61.7 KB** | 48.2 KB |
+| `index.html` | 38,927 B | 10.2 KB | **62.5 KB** | 48.2 KB |
 | `quality.html` | 34,052 B | 9.1 KB | 57.3 KB | 48.2 KB |
 | `capacity.html` | 32,763 B | 7.2 KB | 55.4 KB | 48.2 KB |
 | `dyeing.html` | 28,717 B | 7.6 KB | 55.8 KB | 48.2 KB |

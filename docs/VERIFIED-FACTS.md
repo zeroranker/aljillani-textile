@@ -659,9 +659,9 @@ markup, so a field the owner adds later is described automatically and they do
 not have to remember an attribute.
 
 **Weight, re-measured rather than assumed.** Worst first visit was 58.4 KB and
-is now **61.7 KB**, of which CSS is 12.5 KB gzipped, JS 4.9 KB gzipped, the
-homepage HTML 10.2 KB gzipped and the webfont 34.1 KB. That is 2.41% of the
-Web Almanac 2025 mobile median of 2,559 KB. The whole of cycles 01 to 03 cost
+is now **62.5 KB**, of which CSS is 12.5 KB gzipped, JS 4.9 KB gzipped, the
+homepage HTML 10.2 KB gzipped and the webfont 34.1 KB. That is 2.44% of the
+Web Almanac 2025 mobile median of 2,559 KB. The whole of cycles 01 to 04 cost
 3.3 KB. Honesty invariants unchanged: **104** TO CONFIRM chips, **53**
 .edit-note spans, **17** WhatsApp links.
 ---

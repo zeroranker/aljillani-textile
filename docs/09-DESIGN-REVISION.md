@@ -175,13 +175,13 @@ and do not confuse the two.
 
 | | Before | After |
 |---|---|---|
-| Worst first visit | 22.5 KB | **61.7 KB** |
+| Worst first visit | 22.5 KB | **62.5 KB** |
 | Shared per visit | 12.8 KB | 48.2 KB (CSS 10.2 + JS 3.9 + font 34.1) |
 | Web Almanac 2025 mobile median | 2,559 KB | we are **2.41%** of it |
 
 The 34.1 KB font is the whole difference. It was a deliberate reversal: the
 first build protected a performance number the client did not care about, at
-the cost of looking like every other site. 61.7 KB will pass Core Web Vitals
+the cost of looking like every other site. 62.5 KB will pass Core Web Vitals
 comfortably.
 
 If the font is ever removed, drop the `<link rel="preload">` in every `<head>`
