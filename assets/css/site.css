@@ -158,10 +158,15 @@ a { color: inherit; text-underline-offset: .18em; text-decoration-thickness: fro
 .stack { display: flex; flex-direction: column; gap: var(--s4); }
 
 .grid { display: grid; gap: var(--s5); }
-.grid-2 { display: grid; gap: var(--s6); grid-template-columns: 1fr; }
-.grid-3 { display: grid; gap: var(--s5); grid-template-columns: 1fr; }
+/* Every track is minmax(0,...), never a bare 1fr. A bare 1fr track has an
+   automatic minimum of min-content, so a wide scrollable table inside a
+   .table-wrap still stretches the column instead of scrolling inside it.
+   That pushed finishing.html and capacity.html 121px and 52px past the
+   right edge of a 390px screen. Verified fixed at 390px. */
+.grid-2 { display: grid; gap: var(--s6); grid-template-columns: minmax(0,1fr); }
+.grid-3 { display: grid; gap: var(--s5); grid-template-columns: minmax(0,1fr); }
 .grid-4 { display: grid; gap: var(--s4); grid-template-columns: repeat(2, minmax(0,1fr)); }
-.grid-sidebar { display: grid; gap: var(--s6); grid-template-columns: 1fr; }
+.grid-sidebar { display: grid; gap: var(--s6); grid-template-columns: minmax(0,1fr); }
 
 @media (min-width: 48rem) {
   .grid-2 { grid-template-columns: repeat(2, minmax(0,1fr)); }
@@ -170,7 +175,7 @@ a { color: inherit; text-underline-offset: .18em; text-decoration-thickness: fro
   .grid-sidebar { grid-template-columns: minmax(0,1fr) 20rem; align-items: start; }
 }
 @media (min-width: 64rem) {
-  .grid-2 { grid-template-columns: 7fr 5fr; }          /* asymmetric, not 50/50 */
+  .grid-2 { grid-template-columns: minmax(0,7fr) minmax(0,5fr); } /* asymmetric, not 50/50 */
   .grid-3 { grid-template-columns: repeat(3, minmax(0,1fr)); }
 }
 
@@ -346,7 +351,7 @@ a { color: inherit; text-underline-offset: .18em; text-decoration-thickness: fro
     radial-gradient(70% 90% at 8% 108%, rgba(21,44,85,.9) 0%, transparent 60%);
 }
 .hero h1 { color: #fff; margin-bottom: var(--s5); }
-.hero__grid { display: grid; gap: var(--s7); grid-template-columns: 1fr; align-items: start; }
+.hero__grid { display: grid; gap: var(--s7); grid-template-columns: minmax(0,1fr); align-items: start; }
 .hero__note { color: rgba(255,255,255,.76); font-size: var(--t-small); max-width: 56ch; }
 .hero__actions { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: var(--s6); }
 .hero .btn--ghost { color: #fff; border-color: rgba(255,255,255,.42); }
@@ -396,7 +401,7 @@ a { color: inherit; text-underline-offset: .18em; text-decoration-thickness: fro
 
 /* --- 11. Fact strip ------------------------------------------------------ */
 
-.factstrip { display: grid; grid-template-columns: 1fr; gap: 1px; background: var(--line); border-block: 1px solid var(--line); }
+.factstrip { display: grid; grid-template-columns: minmax(0,1fr); gap: 1px; background: var(--line); border-block: 1px solid var(--line); }
 .fact { background: var(--paper); padding: var(--s5) var(--s5) var(--s5) var(--s4); }
 .fact__k { display: block; font-family: var(--mono); font-size: .625rem; letter-spacing: .15em; text-transform: uppercase; color: var(--ink-3); margin-bottom: .55rem; }
 /* .fact__v is the headline value. .fact__n is the line that supports it.
@@ -433,11 +438,15 @@ a { color: inherit; text-underline-offset: .18em; text-decoration-thickness: fro
   font-family: var(--mono); font-size: .6875rem; font-weight: 700;
   letter-spacing: .15em; color: var(--signal); margin-bottom: var(--s4);
 }
-.card h3 {
+.card h2, .card h3 {
   font-size: clamp(1.3rem, 1.1rem + .7vw, 1.7rem);
   margin-bottom: var(--s3);
   transition: color .16s ease;
 }
+/* capacity.html opens with three peer cards directly under the h1, with no
+   section heading above them, so they carry h2. The selector is widened to
+   match rather than restyling those cards smaller than their siblings. */
+.card--toplevel h2 { margin-bottom: var(--s3); }
 .card--link:hover h3 { color: var(--signal); }
 .card p { color: var(--ink-2); font-size: .95rem; }
 .card__foot { margin-top: var(--s4); font-size: .8125rem; font-weight: 700; color: var(--signal); letter-spacing: .01em; }
@@ -541,7 +550,7 @@ a { color: inherit; text-underline-offset: .18em; text-decoration-thickness: fro
 .timeline__row--key .timeline__fill { background: var(--signal); }
 .timeline__val { font-family: var(--mono); font-size: .8125rem; font-weight: 600; color: var(--ink-2); white-space: nowrap; }
 @media (max-width: 47.99rem) {
-  .timeline__row { grid-template-columns: 1fr; }
+  .timeline__row { grid-template-columns: minmax(0,1fr); }
   .timeline__val { order: 3; }
 }
 
@@ -558,7 +567,7 @@ a { color: inherit; text-underline-offset: .18em; text-decoration-thickness: fro
 .deflist__row + .deflist__row { border-top: 1px solid var(--line); }
 .deflist__row > :first-child { font-weight: 700; font-size: .95rem; letter-spacing: -.01em; }
 .deflist__row > :last-child { color: var(--ink-2); font-size: .95rem; }
-@media (max-width: 40rem) { .deflist__row { grid-template-columns: 1fr; gap: var(--s2); } }
+@media (max-width: 40rem) { .deflist__row { grid-template-columns: minmax(0,1fr); gap: var(--s2); } }
 
 /* --- 17. Tables ---------------------------------------------------------- */
 
@@ -609,7 +618,12 @@ table .num { font-weight: 700; color: var(--ink); }
   border: 1px dashed var(--signal);
   border-radius: var(--r);
   padding: .1rem .45rem;
-  white-space: nowrap;
+  max-width: 100%;
+  /* white-space: nowrap was here. It made this chip 1159px wide on about.html
+     when a long instruction was typed into it, which pushed that whole page
+     788px past the right edge of a 390px screen. The owner edits these chips,
+     so the chip must not be able to force the page wider than the screen no
+     matter what text goes into it. */
 }
 
 /* A dash in a data cell means "not stated yet", which is a different
@@ -695,7 +709,7 @@ html.editing body::before {
 }
 .keyvalue__k { font-weight: 700; color: #fff; font-size: 1.02rem; letter-spacing: -.012em; }
 .keyvalue__n { font-size: .95rem; color: rgba(255,255,255,.76); margin-top: .15rem; }
-@media (max-width: 40rem) { .keyvalue__row { grid-template-columns: 1fr; } }
+@media (max-width: 40rem) { .keyvalue__row { grid-template-columns: minmax(0,1fr); } }
 
 /* --- 21. QA accordion ---------------------------------------------------- */
 
@@ -852,7 +866,7 @@ html.editing body::before {
 /* --- 26. Form ------------------------------------------------------------ */
 
 .form { display: grid; gap: var(--s5); }
-.form__row { display: grid; gap: var(--s5); grid-template-columns: 1fr; }
+.form__row { display: grid; gap: var(--s5); grid-template-columns: minmax(0,1fr); }
 @media (min-width: 48rem) { .form__row { grid-template-columns: repeat(2, minmax(0,1fr)); } }
 .field { display: flex; flex-direction: column; gap: .4rem; }
 .field--full { grid-column: 1 / -1; }
@@ -904,11 +918,31 @@ html.editing body::before {
 
 .wa-bar { display: flex; flex-wrap: wrap; gap: .7rem; }
 
-/* --- 29. Footer ---------------------------------------------------------- */
+/* --- 30. Tap target size (WCAG 2.2 SC 2.5.8, AA) ---------------------------
+   Measured on a 390px screen: the arrow links, the footer links and the
+   breadcrumb were 16 to 20px tall, against a 24px minimum. None of them sit
+   inline in a sentence, so the "inline exception" does not apply and these
+   were real failures on all nine pages.
 
+   The fix is a pseudo-element that grows the hit area to at least 24px while
+   leaving the visible box, the type size and the spacing exactly as they
+   were. 4px of extension each side. Footer links have a .55rem row gap, so
+   extended boxes meet but do not overlap. */
+
+.crumbs a, .footer-links a, a.link-arrow { position: relative; }
+.crumbs a::after,
+.footer-links a::after,
+a.link-arrow::after {
+  content: "";
+  position: absolute;
+  left: -6px; right: -6px;
+  top: -4px; bottom: -4px;
+}
+
+/* --- 29. Footer ---------------------------------------------------------- */
 .site-footer { background: var(--indigo-deep); color: rgba(255,255,255,.72); padding-block: var(--s8) var(--s6); }
-.footer-grid { display: grid; gap: var(--s7); grid-template-columns: 1fr; }
-@media (min-width: 48rem) { .footer-grid { grid-template-columns: 1.4fr 1fr 1fr; } }
+.footer-grid { display: grid; gap: var(--s7); grid-template-columns: minmax(0,1fr); }
+@media (min-width: 48rem) { .footer-grid { grid-template-columns: minmax(0,1.4fr) minmax(0,1fr) minmax(0,1fr); } }
 .site-footer h3 { color: #fff; font-size: .95rem; letter-spacing: -.01em; margin-bottom: var(--s4); }
 .footer-links { list-style: none; margin: 0; padding: 0; display: grid; gap: .55rem; }
 .footer-links a { text-decoration: none; color: rgba(255,255,255,.72); font-size: .93rem; }
