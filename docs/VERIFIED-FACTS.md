@@ -526,3 +526,41 @@ rendering, not by reading the code.
 or machine was altered. Only punctuation. The 104 TO CONFIRM chips a buyer
 sees are unchanged. Worst first visit rose from 22.5 KB to 58.4 KB, which is
 2.3% of the Web Almanac 2025 mobile median.
+---
+
+## Improvement cycle 01
+
+The site was put under version control first (git init), because no
+recoverable baseline existed. Commits and tags est-working-before-cycle-01
+and est-working-after-cycle-01 bracket the cycle.
+
+| # | Finding | Severity | State |
+|---|---|---|---|
+| 52 | bout.html overflowed a 390px screen by **788px** | high | FIXED |
+| 53 | inishing.html overflowed by **121px** | high | FIXED |
+| 54 | capacity.html overflowed by **52px** | high | FIXED |
+| 55 | 9 bare \1fr\ grid tracks take min-content as their floor, so a wide scrollable table stretches the column instead of scrolling inside it | high | FIXED |
+| 56 | A 161-character owner instruction sat inside a buyer-visible \TO CONFIRM\ chip, making a 1159px element | high | FIXED |
+| 57 | \.todo\ used \white-space: nowrap\, so any future long chip repeats #56 | medium | FIXED |
+| 58 | \site.webmanifest\ still carried the pre-redesign palette \#f5f3ee\ / \#1b2a4a\; an installed PWA would splash in the old cream | medium | FIXED |
+| 59 | \capacity.html\ skipped a heading level, h1 to h3 (WCAG 1.3.1) | medium | FIXED |
+| 60 | Every standalone link was 16-20px tall against the WCAG 2.2 SC 2.5.8 24px minimum, on all 9 pages. Zero were exempt under the inline exception | medium | FIXED |
+| 61 | A stale comment told the client to produce \og-default.png\, which already exists at a verified 1200x630 | low | FIXED |
+| 62 | The reveal-animation system (\[data-rise]\) is fully implemented in CSS and JS but applied to **zero** elements. Dead code | low | OPEN, cycle 02 |
+| 63 | The brand mark is inlined 18 times across the site, so replacing it means 18 edits | low | OPEN, cycle 02 |
+
+**#52 to #54 share one root cause (#55).** \ody\ already had
+\overflow-x: hidden\, which was hiding the symptom rather than the cause.
+
+**A correction to an earlier conclusion.** A previous pass reported mobile
+layout as clean. That was measured on the homepage only. Three other pages
+carried real overflow. The DPI-artifact explanation was right for
+\index.html\ and was over-generalised from it.
+
+**Verified after the fix:** 0px horizontal overflow on all 9 pages at both
+390px and 1280px; 53/53 standalone sub-24px targets now measure 24px or more
+and pass a live \elementFromPoint\ hit test; zero heading-level skips; every
+internal link resolves over HTTP; no console or network errors on any page;
+nav toggle, RFQ form blocking on empty submit, and \?edit\ mode all confirmed
+working. Honesty invariants unchanged: **104** \TO CONFIRM\ chips and **17**
+WhatsApp links, identical to before the cycle.
