@@ -1390,38 +1390,38 @@ the schedule.
 
 ## Two rough edges to raise with the person who built this
 
-Neither of these is yours to fix. Both are worth mentioning.
+Neither of these is a fault in the pages, and neither will make the site look
+untidy to a buyer. Both are worth mentioning before launch.
 
-**1. Seven files start with a stray character.** **MEASURED**: in
-`about.html`, `capacity.html`, `dyeing.html`, `facility.html`, `finishing.html`,
-`printing.html` and `quality.html`, the first line reads:
+> **A note on an earlier version of this section.** It previously carried two
+> items marked **MEASURED**: seven files said to start with a stray character
+> before the doctype, and three links said to point at documents whose names do
+> not match. Both were re-checked in September 2026 and **both were wrong**.
+> All nine pages start cleanly with `<!DOCTYPE html>`, and all three referenced
+> files exist under their stated names. The items were left here for a while
+> after they stopped being true. If a claim in this guide is marked MEASURED,
+> check it before you act on it.
 
-```
-?<!DOCTYPE html>
-```
+**1. The logo is written out 18 times, so changing it means changing 18 places.**
+The mark is inlined as an SVG in the header and the footer of every one of the
+nine pages, twice each. It has to be inlined rather than linked, because it is
+drawn in three colours and those colours change between the light header and
+the dark footer. That is why `assets/img/mark.svg` exists but is not used by
+any page.
 
-with a question mark in front of `<!DOCTYPE html>`. `contact.html` and
-`index.html` are correct.
+If the name or the mark ever changes, use your editor's **replace in all
+files** across the nine `.html` files and check you end with zero matches. If
+you only change some of them, the site will show two different logos, which is
+far worse than either version. Search for `brand__mark` to find every copy.
 
-The `DOCTYPE` line must be the very first thing in the file. Anything in front of
-it can put the browser into an older compatibility mode, which changes how it
-measures boxes and can shift the layout. **The fix is deleting one character per
-file**, and it should be done by whoever built the site, with the pages checked
-before and after.
-
-**2. Three links inside the site point at documents whose names do not match.**
-**MEASURED**: `index.html` links to `docs/UPDATE-GUIDE.md` and
-`docs/PRE-LAUNCH-GATE.md`, and `facility.html` links to
-`docs/06-CLIENT-CHECKLIST.md`. The files in `docs/` are numbered —
-`00-RESEARCH.md`, `01-SITEMAP.md`, `02-CONTENT.md`, `03-DESIGN.md`,
-`06-CLIENT-CHECKLIST.md`, and this guide, `08-UPDATE-GUIDE.md`. **You are
-reading this file**, so the first of those three links is one character away from
-being right. The other two need either the links or the file names to be
-reconciled. Ask the consultant. It is a two-minute job and it is the kind of
-thing a buyer clicks once and quietly decides the site was not maintained.
+**2. One page is deliberately unfinished, and the buyers can see that.**
+`facility.html` shows labelled placeholders where the photographs go. That is
+the honest choice and it should stay until real photographs exist. But it does
+mean the plant cannot be judged visually yet, and on a site whose argument is
+proof, that is the weakest point on it. Photographs of the real floor, even an
+unglamorous working one, are worth more than any other single addition.
 
 ---
-
 ## The short version
 
 1. Open the file in Notepad. Change words **between** angle brackets. Save.

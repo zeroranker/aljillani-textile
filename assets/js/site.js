@@ -336,7 +336,21 @@
 
   /* ---------------------------------------------------------------------
      6. BOOT
+     ---------------------------------------------------------------------
+     Each step runs inside its own guard. Without this, one error anywhere
+     aborted every step after it, and because "no-js" has already been
+     removed by that point, a page could be left with content that is styled
+     invisible and no way to recover short of disabling JavaScript again.
+     A failed enhancement is never allowed to cost a reader the page.
      --------------------------------------------------------------------- */
+  function safely(name, fn) {
+    try {
+      fn();
+    } catch (err) {
+      if (window.console && console.warn) console.warn("site.js: " + name + " failed", err);
+    }
+  }
+
   function boot() {
     doc.documentElement.classList.remove("no-js");
 
@@ -346,11 +360,13 @@
       doc.documentElement.classList.add("editing");
     }
 
-    initNav();
-    initWhatsAppLinks();
-    initReveal();
-    var forms = doc.querySelectorAll("form[data-rfq]");
-    for (var i = 0; i < forms.length; i++) initForm(forms[i]);
+    safely("nav", initNav);
+    safely("whatsapp links", initWhatsAppLinks);
+    safely("reveal", initReveal);
+    safely("forms", function () {
+      var forms = doc.querySelectorAll("form[data-rfq]");
+      for (var i = 0; i < forms.length; i++) initForm(forms[i]);
+    });
   }
 
   if (doc.readyState === "loading") {

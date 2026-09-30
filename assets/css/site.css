@@ -674,6 +674,23 @@ html.editing .edit-note { display: block; }
 caption .edit-note { display: none; }
 html.editing caption .edit-note { display: inline-block; margin: 0 0 0 .4rem; }
 
+/* A whole callout addressed to the owner. Same trigger as .edit-note, but
+   for a block of guidance too large to sit inside one of those spans.
+   facility.html carried one of these as visible text, where it told a buyer
+   that the page "most limits how much a buyer trusts the rest of the
+   numbers" and linked to an internal markdown file. */
+.callout--owner { display: none; }
+html.editing .callout--owner { display: block; }
+
+/* Build metadata sitting under the photograph placeholders: the file name and
+   pixel size on facility.html, the capture instruction on index.html. Neither
+   means anything to a buyer, so both are owner-only. The placeholder itself
+   stays visible on purpose: "Awaiting photo" plus a description of what the
+   photograph will prove is more credible than a stock image, which is the
+   whole argument this site is making. */
+.shot__meta { display: none; }
+html.editing .shot__meta { display: block; }
+
 /* A thin bar so it is obvious the page is in editing mode. */
 html.editing body::before {
   content: "EDITING MODE — these blue notes are for you, not for buyers. Remove ?edit from the address to see the real page.";

@@ -664,3 +664,61 @@ homepage HTML 10.2 KB gzipped and the webfont 34.1 KB. That is 2.41% of the
 Web Almanac 2025 mobile median of 2,559 KB. The whole of cycles 01 to 03 cost
 3.3 KB. Honesty invariants unchanged: **104** TO CONFIRM chips, **53**
 .edit-note spans, **17** WhatsApp links.
+---
+
+## Improvement cycle 04
+
+Scope: the two items deferred from cycle 01, plus a check of the pages from a
+buyer's point of view rather than a component's.
+
+| # | Finding | Severity | State |
+|---|---|---|---|
+| 80 | **acility.html carried a buyer-visible "Note for the site owner" callout** saying the page "most limits how much a buyer trusts the rest of the numbers", stating the photography rules, and linking to an internal markdown file | high | FIXED |
+| 81 | bout.html had a TO CONFIRM chip whose visible text was **"EDIT: street, plot, belt"**. The chip system is deliberately buyer-visible, so this showed editor instruction to every visitor | high | FIXED |
+| 82 | quality.html showed a visible "For the site owner:" maintenance note as body text | medium | FIXED |
+| 83 | acility.html used "Shot list" as a visible eyebrow, which is production jargon | low | FIXED, wording changed |
+| 84 | .shot__meta showed build metadata to buyers: file names and pixel sizes on acility.html, capture instructions on index.html | low | FIXED |
+| 85 | **The client-facing update guide asserted two false facts, both marked MEASURED** | high | FIXED |
+| 86 | oot() ran four initialisers in sequence with no guard, so one error aborted the rest while 
+o-js had already been removed | medium | FIXED |
+| 87 | acility.html promised to state "the filename it should be saved under", which is no longer displayed after #84 | low | FIXED |
+
+**#80, #81 and #82 are the same category of defect, and it is the one the whole
+project is built against.** Every other page had put its owner guidance in
+.edit-note, which is hidden until ?edit. These three had escaped it. The
+bout.html chip is the clearest example of why the two systems must never be
+confused: .todo is buyer-visible on purpose, so an instruction written into
+one is published.
+
+**#85 is a finding about this documentation, not about the site.** The update
+guide told a non-technical owner that seven of their files began with a stray
+character before the doctype, and that three links pointed at documents whose
+names do not match. Both were re-measured in September 2026 and both were
+false: all nine pages start cleanly, and all three named files exist under the
+names given. They had been true once and were never removed. A guide that
+reports problems which do not exist teaches the owner to distrust the guide.
+The section now says plainly that its own earlier claims were wrong, and
+warns that a MEASURED claim should be re-checked before acting on it.
+
+**On #84, a judgement call worth recording.** The photograph placeholders are
+the honesty system working as designed and were left visible on purpose: a
+buyer seeing "Awaiting photo" plus a description of what the photograph will
+prove learns more than a buyer looking at a stock photograph, and the site
+refuses stock photography on principle. Only the build metadata under each
+card was removed. The eyebrow was reworded from "Shot list" to "Pending
+photographs" so the page describes the buyer's situation rather than the
+production schedule.
+
+**Verified after the fix:** 0 buyer-visible internal-instruction leaks across
+all nine pages, measured by walking text nodes and discarding any whose
+ancestor chain includes .edit-note or .callout--owner. The owner callout
+measures 0px tall to a buyer and 263px in ?edit mode. Structure clean on all
+nine pages, TO CONFIRM chips still **104**, WhatsApp links still **17**, all
+internal links resolve, site.js passes 
+ode --check.
+
+**Note on measurement.** A first version of the leak scan reported roughly 20
+hits, all false: it read element.textContent, which concatenates nested
+.edit-note text, so a paragraph containing an edit-note looked like a leak.
+Walking text nodes and testing ancestors gave the true count of 3. The false
+version would have "fixed" working pages.
