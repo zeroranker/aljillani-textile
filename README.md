@@ -5,9 +5,16 @@
 > Every fact the company has not yet supplied sits on the page as a visible
 > **`TO CONFIRM`** chip. Nothing has been invented to fill those gaps.
 >
-> **MEASURED:** there are **182** such chips across the nine pages — 108 of them
-> on `capacity.html` alone. Until every one is replaced with a real figure from
-> the plant's own records, this site is not publishable.
+> **MEASURED 2026-09-16:** there are **104** such chips across the nine pages,
+> **32** of them on `capacity.html` alone. Until every one is replaced with a
+> real figure from the plant's own records, this site is not publishable.
+>
+> Separately, `capacity.html` carries **76** plain dashes marked
+> `todo--empty`. Those are table cells where a column genuinely does not apply,
+> not facts awaiting confirmation, and they are styled so they are never read
+> as a warning. An earlier version of this file said "182 chips" and counted
+> those dashes as chips. It was wrong in a way that made the draft look worse
+> than it is, which is no excuse for stating it.
 >
 > The red **DRAFT** ribbon across the top of each page is a warning to your own
 > staff. **It is not a lock.** Nothing technically stops a search engine from
